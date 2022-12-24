@@ -1,5 +1,5 @@
-import { Person } from "../models/person.model";
-import { PersonRepository } from "./person.repository";
+import { PersonneDAO } from "../data/personne.dao";
+import { PersonRepository } from "../data/personne.repository";
 
 describe('PersonRepository', () => {
     beforeEach(() => {
@@ -11,28 +11,28 @@ describe('PersonRepository', () => {
             const id = 1;
             
             const mockResponse = {
-                personnne_id: 1,
-                personne_nom: 'Doe',
-                personne_prenom: 'John',
+                personneId: 1,
+                personneNom: 'Doe',
+                personnePrenom: 'John',
             }
 
             const expected = {
-                nom: "Doe",
-                prenom: "John"
+                personneNom: 'Doe',
+                personnePrenom: 'John'
             }
 
             const repo = new PersonRepository()
-            Person.findOne = jest.fn().mockResolvedValue(mockResponse);
+            PersonneDAO.findOne = jest.fn().mockResolvedValue(mockResponse);
 
             //act
             const result = await repo.findById(id);
 
             //assert
             expect(result).toEqual(expected);
-            expect(Person.findOne).toHaveBeenCalledTimes(1);
-            expect(Person.findOne).toBeCalledWith({
+            expect(PersonneDAO.findOne).toHaveBeenCalledTimes(1);
+            expect(PersonneDAO.findOne).toBeCalledWith({
                 where: {
-                    personnne_id: id
+                    personneId: id
                 }
             });
         });

@@ -1,24 +1,16 @@
-import cors from 'cors'
-import express from 'express'
 import * as dotenv from 'dotenv'
-import { apiRouter } from './api/routers/api.router'
-import unexpectedErrorMiddleware from './api/middlewares/error.global'
-import helmet from 'helmet'
+import sequelize from './core/database/sequelize'
+import { createServer } from './core/server'
 import { logger } from './winston.logger'
 
 dotenv.config()
 
-const app = express()
+createServer().then(app => {
+    sequelize.sync({ force: true })
 
-app.use(helmet())
+    app.listen(process.env.PORT, () => logger.info('Running.'))
+})
 
-app.use(express.json())
 
-app.use(cors())
 
-app.use(apiRouter)
-
-app.use(unexpectedErrorMiddleware)
-
-app.listen(process.env.PORT, () => logger.info('Running.'))
 

@@ -14,9 +14,11 @@
       "experimentalDecorators": true,
       "outDir": "./dist",
       "strictPropertyInitialization": false,
+      "rootDir": "src",
       "paths": {
         "~/*": ["./src/*"],
-        "~~/*": ["./*"]
+        "~~/*": ["./*"],
+        "@test/*": ["src/*", "bin/*"]
       }
     },
     "ts-node": {
