@@ -5,6 +5,7 @@ import { apiRouter } from './api/routers/api.router'
 import unexpectedErrorMiddleware from './api/middlewares/error.global'
 import helmet from 'helmet'
 import { logger } from './winston.logger'
+import sequelize from './sequelize'
 
 dotenv.config()
 
@@ -19,6 +20,7 @@ app.use(cors())
 app.use(apiRouter)
 
 app.use(unexpectedErrorMiddleware)
+sequelize.sync({force: true})
 
 app.listen(process.env.PORT, () => logger.info('Running.'))
 

@@ -1,7 +1,11 @@
 import { Router } from "express";
-import handler from "../../modules/person/handler/person.handler";
+import { adminHandler } from "~/inject";
 
-export const router = Router();
+export const adminRouter = Router();
 
-router.get('/person', handler.getPersons);
+
+adminRouter.get('/admin', adminHandler.getAdmin);
+adminRouter.post('/admin', adminHandler.create);
+adminRouter.post('/admins', adminHandler.findAll);
+
 

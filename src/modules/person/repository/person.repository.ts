@@ -6,7 +6,9 @@ import { IRepository } from "../../core/respository.interface";
 export class PersonRepository implements IRepository<PersonDTO> {
 
     async findById(id: number): Promise<PersonDTO | null> {
-        return Person.findByPk(id).then(person => PersonMapper.mapToDto(person))
+        return await Person.findByPk(id)
+            .then(person => PersonMapper.mapToDto(person))
+            
     }
 
     findAll(): Promise<PersonDTO[]> {

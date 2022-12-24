@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { router } from "./router";
+import { adminRouter } from "./router";
 
 export const apiRouter = Router()
 
-apiRouter.use('/api/v1', router)
+apiRouter.use('/api/v1', adminRouter)

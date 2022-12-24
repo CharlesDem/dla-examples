@@ -2,11 +2,10 @@ import { DataTypes, Model } from "sequelize";
 import sequelize from "../../../sequelize";
 
 export class Person extends Model {
-  person_id?: number
-  personne_nom: string
-  personne_prenom: string
+  personId?: number
+  personneNom: string
+  personnePrenom: string
 }
-export class Nom extends Model { }
 
 Person.init({
   personnne_id: {
