@@ -1,8 +1,8 @@
 import { Transaction } from "sequelize";
-import sequelize from "../../sequelize";
-import { Person } from "../person/models/person.model";
-import { Admin } from "./admin.model";
-import { AdminRepository } from "./admin.repository";
+import sequelize from "../../../sequelize";
+import { Person } from "../../person/person.model";
+import { Admin } from "../admin.model";
+import { AdminRepository } from "../admin.repository";
 
 
 describe('AdminRepository', () => {

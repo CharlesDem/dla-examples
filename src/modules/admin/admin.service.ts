@@ -1,35 +1,52 @@
-import { IRepository } from "../core/respository.interface";
-import { IService } from "../core/service.interface";
-import { AdminDTO } from "./admin.dto";
-import { Filter } from "./admin.handler";
+import { NotFoundError } from "../core/errors/errors";
+import { Filter } from "../core/filters";
+import { IServiceCreate, IService } from "../core/service.interface";
+import { AdminPersonDTO, AdminDTO } from "./admin.dto";
+import { IAdminRepository } from "./admin.repository";
 
-export class AdminService implements IService<AdminDTO>{
+export interface IAdminService extends IService<AdminDTO>, IServiceCreate<AdminPersonDTO> {}
 
-    private adminrepository: IRepository<AdminDTO>;
+export class AdminService implements IAdminService{
 
-    constructor(adminrepository: IRepository<AdminDTO>) {
+    private adminrepository: IAdminRepository;
+
+    constructor(adminrepository: IAdminRepository) {
         this.adminrepository = adminrepository;
     }
 
-    findAll(filter : Filter): Promise<AdminDTO[]> {
-        console.log(filter.filter)
-        throw new Error("Method not implemented.");
+    /**
+     * 
+     * @param filter 
+     * @returns 
+     */
+    async findAll(filter: any): Promise<AdminDTO[]> {
+        return this.adminrepository.findAll(filter)
     }
 
+    /**
+     * 
+     * @param id 
+     * @returns 
+     */
     async findById(id: number): Promise<AdminDTO | null> {
         return this.adminrepository
-            .findById(id)
-            .then(admin => {
-                if (admin === null) return null;
-                admin.personneNom = "M. " + admin.personneNom;
-                return admin;
-            });
+            .findById(id);
+            
     }
 
-    create(admin: AdminDTO): Promise<AdminDTO> {
+    /**
+     * 
+     * @param admin 
+     * @returns 
+     */
+    async create(admin: AdminPersonDTO): Promise<AdminPersonDTO> {
         return this.adminrepository.create(admin);
     }
 
+    /**
+     * 
+     * @param id 
+     */
     delete(id: number): Promise<boolean> {
         throw new Error("Method not implemented.");
     }

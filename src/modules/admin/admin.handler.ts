@@ -1,13 +1,13 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { logger } from "~/winston.logger";
-import { IService } from "../core/service.interface";
-import { AdminDTO } from "./admin.dto";
+import { AdminPersonDTO } from "./admin.dto";
+import { IAdminService } from "./admin.service";
 
 export class AdminHandler {
 
-    private adminService: IService<AdminDTO>;
+    private adminService: IAdminService;
 
-    constructor(adminService: IService<AdminDTO>) {
+    constructor(adminService: IAdminService) {
         this.adminService = adminService;
     }
 
@@ -17,10 +17,10 @@ export class AdminHandler {
      * @param res 
      * @returns 
      */
-    create = async (req: Request,res: Response) =>  {
+    create = async (req: Request, res: Response, next: NextFunction) => {
         console.log(this.adminService)
 
-        const adminDto: AdminDTO = req.body;
+        const adminDto: AdminPersonDTO = req.body;
         try {
             const result = await this.adminService.create(adminDto);
 
@@ -28,17 +28,31 @@ export class AdminHandler {
 
             res.status(200).json(result);
         } catch (err) {
-            logger.error(err)
-            throw err;
+            logger.error(err);
+            next(err);
         }
 
     }
 
-    findAll = async (req: Request, res: Response) => {
-        await this.adminService.findAll({filter: "aze"} as Filter)
+
+    /**
+     * 
+     * @param req 
+     * @param res 
+     */
+    findAll = async (req: Request, res: Response, next: NextFunction) => {
+        const filters = req.query;
+
+        try {
+            const result = await this.adminService.findAll(filters)
+            res.status(200).json(result)
+
+        } catch (err) {
+            next(err);
+        }
     }
 
-  
+
 
 
     /**
@@ -47,18 +61,20 @@ export class AdminHandler {
      * @param res 
      * @returns 
      */
-    async getAdmin(req: Request, res: Response) {
-        return null;
+    getAdmin = async (req: Request, res: Response, next: NextFunction) => {
+
+        const id = req.params.id as unknown as number;
+        try {
+
+            const result = await this.adminService.findById(id);
+            res.status(200).json(result);
+        } catch (err) {
+            next(err);
+        }
     }
 
 }
 
 
-
-
-
-export interface Filter {
-        filter:string
-}
 
 

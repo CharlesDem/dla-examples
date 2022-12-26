@@ -1,21 +1,38 @@
 import sequelize from "../../sequelize";
-import { IRepository } from "../core/respository.interface";
-import { Person } from "../person/models/person.model";
-import { AdminDTO } from "./admin.dto";
+import { NotFoundError } from "../core/errors/errors";
+import { Filter } from "../core/filters";
+import { IRepository, IRepositoryCreate } from "../core/respository.interface";
+import { Person } from "../person/person.model";
+import { AdminPersonDTO, AdminDTO } from "./admin.dto";
+import { AdminMapper } from "./admin.mapper";
 import { Admin } from "./admin.model";
 
+export interface IAdminRepository extends IRepositoryCreate<AdminPersonDTO>, IRepository<AdminDTO> { }
 
-export class AdminRepository implements IRepository<AdminDTO> {
 
-    findAll(): Promise<AdminDTO[]> {
-        throw new Error("Method not implemented.");
+export class AdminRepository implements IAdminRepository {
+
+    /**
+     * 
+     * @param filter 
+     * @returns 
+     */
+    async findAll(filter: any): Promise<AdminDTO[]> {
+
+        return (await Admin.findAll({
+            where: filter
+        })).map(admin => AdminMapper.mapToAdminOnlyDto(admin));
     }
 
-    async findById(id: number): Promise<AdminDTO | null> {
-
-        return null
-        //   return await Admin.findByPk(id)
-        //        .then(admin => AdminMapper.mapToDto(admin))
+    /**
+     * 
+     * @param id 
+     * @returns 
+     */
+    async findById(id: number): Promise<AdminDTO> {
+        const result = await Admin.findByPk(id);
+        if (result === null) throw new NotFoundError("Not found");
+        return AdminMapper.mapToAdminOnlyDto(result);
     }
 
 
@@ -24,15 +41,15 @@ export class AdminRepository implements IRepository<AdminDTO> {
      * @param admin 
      * @returns 
      */
-    async create(admin: AdminDTO): Promise<AdminDTO> {
+    async create(admin: AdminPersonDTO): Promise<AdminPersonDTO> {
 
         const t = await sequelize.transaction();
 
         try {
             const newPerson = await Person.create(
                 {
-                    personne_nom: admin.personneNom,
-                    personne_prenom: admin.personnePrenom
+                    personNom: admin.personneNom,
+                    personPrenom: admin.personnePrenom
                 },
                 {
                     transaction: t
@@ -40,7 +57,7 @@ export class AdminRepository implements IRepository<AdminDTO> {
             );
 
             const newAdmin = await Admin.create({
-                personne_id: newPerson.personId,
+                personId: newPerson.personId,
                 service: admin.service
             },
                 {
@@ -48,10 +65,10 @@ export class AdminRepository implements IRepository<AdminDTO> {
                 }
             );
 
-            const result: AdminDTO = {
-                personId: newPerson.getDataValue('personne_id'),
-                personneNom: newPerson.getDataValue('personne_nom'),
-                personnePrenom: newPerson.getDataValue('personne_prenom'),
+            const result: AdminPersonDTO = {
+                personId: newPerson.personId,
+                personneNom: newPerson.personNom,
+                personnePrenom: newPerson.personPrenom,
                 service: newAdmin.service
             }
 
@@ -59,10 +76,14 @@ export class AdminRepository implements IRepository<AdminDTO> {
             return result;
         } catch (err) {
             await t.rollback()
-            throw err
+            throw err;
         }
     }
 
+    /**
+     * 
+     * @param id 
+     */
     delete(id: number): Promise<boolean> {
         throw new Error("Method not implemented.");
     }

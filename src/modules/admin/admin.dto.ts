@@ -1,11 +1,11 @@
-export interface AdminDTO {
+export interface AdminPersonDTO {
     personId?: number
     personneNom: string
     personnePrenom: string
     service: string
 }
 
-export interface AdminOnlyDTO {
+export interface AdminDTO {
     personId?: number,
     service: string
 }

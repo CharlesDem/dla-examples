@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
-import { PersonRepository } from "~/modules/person/repository/person.repository";
-import { PersonService } from "~/modules/person/service/person.service";
-import { Admin } from "../../admin/admin.model";
+import { PersonRepository } from "~/modules/person/person.repository";
+import { PersonService } from "~/modules/person/person.service";
 
 const personService = new PersonService(new PersonRepository);
 
 async function getPersons(req: Request, res: Response) {
-    Admin.findAll()
+
     try {
         const result = await personService.findById(1);
         if (result === null) return res.status(404).send()

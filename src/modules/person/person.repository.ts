@@ -1,9 +1,9 @@
-import { PersonDTO } from "../models/person.dto";
-import { Person } from "../models/person.model";
-import { PersonMapper } from "../models/person.mapper";
-import { IRepository } from "../../core/respository.interface";
+import { PersonDTO } from "./person.dto";
+import { Person } from "./person.model";
+import { PersonMapper } from "./person.mapper";
+import { IRepositoryCommon } from "../core/respository.interface";
 
-export class PersonRepository implements IRepository<PersonDTO> {
+export class PersonRepository implements IRepositoryCommon<PersonDTO> {
 
     async findById(id: number): Promise<PersonDTO | null> {
         return await Person.findByPk(id)

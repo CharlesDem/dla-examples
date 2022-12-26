@@ -1,18 +1,26 @@
-import { AdminDTO, AdminOnlyDTO } from "./admin.dto";
+import { Person } from "../person/person.model";
+import { AdminDTO, AdminPersonDTO } from "./admin.dto";
 import { Admin } from "./admin.model";
 
 export class AdminMapper {
 
-    static mapToDto(admin: Admin | null): AdminOnlyDTO | null {
-        if (admin === null) return null;
-        const dto: AdminOnlyDTO = {
+    static mapToAdminOnlyDto(admin: Admin): AdminDTO {
+        const dto: AdminDTO = {
+            personId: admin.personId,
             service: admin.service,
         }
         return dto;
     }
 
-    static mapToModel() {
-
+    static mapToAdminDto(person: Person, admin: Admin): AdminPersonDTO | null{
+        if (admin === null) return null;
+        const dto: AdminPersonDTO = {
+            personId: admin.personId,
+            personneNom: person.personNom,
+            personnePrenom: person.personPrenom,
+            service: admin.service,
+        }
+        return dto;
     }
 
 }

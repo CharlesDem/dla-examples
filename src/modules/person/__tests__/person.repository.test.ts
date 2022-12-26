@@ -1,5 +1,5 @@
-import { Person } from "../models/person.model";
-import { PersonRepository } from "./person.repository";
+import { Person } from "../person.model";
+import { PersonRepository } from "../person.repository";
 
 describe('PersonRepository', () => {
     beforeEach(() => {
@@ -11,9 +11,9 @@ describe('PersonRepository', () => {
             const id = 1;
             
             const mockResponse = {
-                personnne_id: 1,
-                personne_nom: 'Doe',
-                personne_prenom: 'John',
+                personnId: 1,
+                personNom: 'Doe',
+                personPrenom: 'John',
             }
 
             const expected = {
@@ -32,7 +32,7 @@ describe('PersonRepository', () => {
             expect(Person.findOne).toHaveBeenCalledTimes(1);
             expect(Person.findOne).toBeCalledWith({
                 where: {
-                    personnne_id: id
+                    personId: id
                 }
             });
         });

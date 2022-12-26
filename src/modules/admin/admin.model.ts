@@ -1,17 +1,17 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, InferAttributes, Model } from "sequelize";
 import sequelize from "../../sequelize";
 
-export class Admin extends Model {
-  personId?: number
-  service: string
+export class Admin extends Model<InferAttributes<Admin>> {
+  declare personId?: number
+  declare service: string
 }
 
 Admin.init({
-  personnne_id: {
+  personId: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
-   // field: 'personId',
+    field: 'person_id',
     key: 'personId'
   },
   service: {

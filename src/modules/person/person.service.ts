@@ -1,11 +1,12 @@
-import { PersonDTO } from "../models/person.dto";
-import { IRepository } from "../../core/respository.interface";
+import { PersonDTO } from "./person.dto";
+import { IRepository } from "../core/respository.interface";
+import { IserviceCommon } from "~/modules/core/service.interface";
 
 export class PersonService {
 
-    private personRepository: IRepository<PersonDTO>;
+    private personRepository: IserviceCommon<PersonDTO>;
 
-    constructor(_personRepository : IRepository<PersonDTO>) {
+    constructor(_personRepository : IserviceCommon<PersonDTO>) {
         this.personRepository = _personRepository;
     }
 
